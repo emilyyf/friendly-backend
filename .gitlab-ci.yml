@@ -1,0 +1,18 @@
+image: golang:latest
+
+cache:
+  paths:
+    - friendly-backend/
+
+lint:
+  script:
+    - test -z "$(gofmt -l .)"
+
+
+build:
+  script:
+    - mkdir friendly-backend
+    - go build -o friendly-backend  ./...
+  artifacts:
+    paths:
+      - friendly-backend

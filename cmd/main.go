@@ -2,13 +2,10 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"log"
-	"net/http"
 	"os"
 
 	"github.com/joho/godotenv"
-	"gitlab.com/emilyyf/friendly-backend/internal/handlers"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -34,8 +31,4 @@ func main() {
 			panic(err)
 		}
 	}()
-
-	mux := http.NewServeMux()
-
-	// mux.HandleFunc("/login", handlers.NewPostLoginHandler())
 }
