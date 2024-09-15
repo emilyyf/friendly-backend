@@ -1,34 +1,13 @@
 package main
 
 import (
-	"context"
-	"log"
-	"os"
-
-	"github.com/joho/godotenv"
-	"go.mongodb.org/mongo-driver/v2/mongo"
-	"go.mongodb.org/mongo-driver/v2/mongo/options"
+	v1 "friendly-backend/internal/api/v1/user"
+	"net/http"
 )
 
 func main() {
-	if err := godotenv.Load(); err != nil {
-		log.Println("No .env file found")
-	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("GET /v1/user", v1.GetUserHandler)
 
-	uri := os.Getenv("MODGODB_URI")
-	if uri == "" {
-		uri = "mongodb://localhost:27017"
-		// log.Fatal("Set your 'MONDOGB_URI' environment variable. ")
-	}
-
-	db, err := mongo.Connect(options.Client().ApplyURI(uri))
-	if err != nil {
-		panic(err)
-	}
-
-	defer func() {
-		if err := db.Disconnect(context.TODO()); err != nil {
-			panic(err)
-		}
-	}()
+	http.ListenAndServe(":8000", mux)
 }
