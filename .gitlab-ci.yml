@@ -11,7 +11,7 @@ lint:
 
 build:
   script:
-    - mkdir friendly-backend
+    - mkdir -p friendly-backend
     - go build -o friendly-backend  ./...
   artifacts:
     paths:
