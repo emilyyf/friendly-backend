@@ -8,6 +8,7 @@ import (
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("GET /v1/user", v1.GetUserHandler)
+	mux.HandleFunc("POST /v1/user", v1.CreateUserHandler)
 
 	http.ListenAndServe(":8000", mux)
 }
