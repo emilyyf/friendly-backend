@@ -9,7 +9,7 @@ import (
 
 type Household struct {
 	ID                uuid.UUID `json:"id"`
-	Code              int64     `json:"adress"`
+	Code              int64     `json:"code"`
 	Date              time.Time `json:"date"`
 	Adress            string    `json:"adress"`
 	AdressNumber      string    `json:"adress_number"`
