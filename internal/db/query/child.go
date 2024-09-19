@@ -1,4 +1,4 @@
-package models
+package db
 
 import (
 	db "friendly-backend/internal/db/connection"
