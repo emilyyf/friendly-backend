@@ -114,11 +114,11 @@ func UpdateChild(child child.Child) (id uuid.UUID, err error) {
 
 	sql := `UPDATE child SET id_household = $2 , id_mother = $3 , name =  $4 , birth =  $5, age = $6, local = $7, race =  $8, alive_birth_certificate =  $9, birth_ceriticate = $10,
                             rg = $11, cpf =  $12, sus_card = $13, blood_type = $14, weight_at_birth = $15, height_at_birth = $16, first_apgar = $17, fifth_apgar = $18, neonatal_hell_prick = $19, hear_test = $20, hearing_triage = $21,
-                            eye_test = $22, od = $23, oe = $24, pregnancy_time = $25, login = $26, msd = $27, mmii = $28, create_log = $29, update_log = $30`
+                            eye_test = $22, od = $23, oe = $24, pregnancy_time = $25, login = $26, msd = $27, mmii = $28, create_log = $29, update_log = $30 WHERE id = $1`
 
-	_, err = conn.Exec(sql, child.IDHousehold, child.IDMother, child.Name, child.Birth, child.Age, child.Local, child.Race, child.AliveBirthCertificate, child.BirthCertificate,
+	_, err = conn.Exec(sql, child.ID, child.IDHousehold, child.IDMother, child.Name, child.Birth, child.Age, child.Local, child.Race, child.AliveBirthCertificate, child.BirthCertificate,
 		child.RG, child.CPF, child.SUSCard, child.BloodType, child.WeightAtBirth, child.HeightAtBirth, child.FirstApgar, child.FifthApgar, child.NeonatalHeelPrick, child.HearTest, child.HearingTriage,
-		child.EyeTest, child.OD, child.OE, child.PregnancyTime, child.Login, child.MSD, child.MMII, child.CreateLog, child.UpdateLog, child.ID)
+		child.EyeTest, child.OD, child.OE, child.PregnancyTime, child.Login, child.MSD, child.MMII, child.CreateLog, child.UpdateLog)
 	if err != nil {
 		return
 	}
