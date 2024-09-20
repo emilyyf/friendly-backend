@@ -1,4 +1,4 @@
-package db
+package appointment
 
 import (
 	"friendly-backend/internal/db/entities/child"
