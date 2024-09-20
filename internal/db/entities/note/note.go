@@ -9,7 +9,7 @@ import (
 	"github.com/google/uuid"
 )
 
-type Participation struct {
+type Note struct {
 	ID          uuid.UUID     `json:"id"`
 	IDPerson    person.Person `json:"id_person"`
 	IDChild     child.Child   `json:"id_child"`
