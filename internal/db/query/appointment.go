@@ -102,9 +102,9 @@ func UpdateAppointment(appointment appointment.Appointment) (id uuid.UUID, err e
 	}
 	defer conn.Close()
 
-	sql := `UPDATE appointment SET id_child = $2, date = $3, ig = $4, weight = $5, pa = $6, au = $7, bcf = $8, create_log = $9, update_log = $10`
+	sql := `UPDATE appointment SET id_child = $2, date = $3, ig = $4, weight = $5, pa = $6, au = $7, bcf = $8, create_log = $9, update_log = $10 WHERE id = $1`
 
-	_, err = conn.Exec(sql, appointment.IDChild, appointment.Date, appointment.IG, appointment.Weight, appointment.PA, appointment.BCF, appointment.CreateLog, appointment.UpdateLog)
+	_, err = conn.Exec(sql, appointment.ID, appointment.IDChild, appointment.Date, appointment.IG, appointment.Weight, appointment.PA, appointment.BCF, appointment.CreateLog, appointment.UpdateLog)
 	if err != nil {
 		return uuid.Nil, err
 	}
