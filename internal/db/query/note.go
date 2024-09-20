@@ -99,7 +99,7 @@ func UpdateNote(note note.Note) (id uuid.UUID, err error) {
 	}
 	defer conn.Close()
 
-	sql := `UPDATE note SET id_person = $2, id_child = $3, date = $ 4, description = $6, create_log = $7, update_log = $ WHERE id = $1`
+	sql := `UPDATE note SET id_person = $2, id_child = $3, date = $ 4, description = $6, create_log = $7, update_log = $8 WHERE id = $1`
 
 	_, err = conn.Exec(sql, note.ID, note.IDPerson, note.IDChild, note.Date, note.Description, note.CreateLog, note.UpdateLog)
 	if err != nil {
