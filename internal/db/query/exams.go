@@ -100,7 +100,7 @@ func UpdateExams(exams exams.Exams) (id uuid.UUID, err error) {
 	}
 	defer conn.Close()
 
-	sql := `UPDATE exams SET description = $2, date = $3, result = $4, igm = $5, igg = $6, id_medical_history = $7, create_log = $8, update_log = $9`
+	sql := `UPDATE exams SET description = $2, date = $3, result = $4, igm = $5, igg = $6, id_medical_history = $7, create_log = $8, update_log = $9 WHERE id = $1`
 
 	_, err = conn.Exec(sql, exams.Description, exams.Date, exams.Result, exams.IGM, exams.IGG, exams.IDMedicalHistory, exams.CreateLog, exams.UpdateLog)
 	if err != nil {
