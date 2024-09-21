@@ -2,25 +2,23 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
+	"embed"
 	"log"
 	"os"
+
+	_ "github.com/lib/pq"
 )
 
 var (
-	// TODO:Get values from .env
-	dbUser     = os.Getenv("admin")
-	dbPassword = os.Getenv("password123")
-	dbName     = os.Getenv("friendly")
-	dbHost     = os.Getenv("127.0.0.1")
-	dbPort     = os.Getenv("6500")
+	dbDriver = os.Getenv("POSTGRES_DRIVER")
+	dbUrl    = os.Getenv("POSTGRES_SOURCE")
 )
 
-func OpenConnection() (*sql.DB, error) {
-	connectionInfo := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		dbHost, dbPort, dbUser, dbPassword, dbName)
+//go:embed migrations/*.sql
+var Migrations embed.FS
 
-	db, err := sql.Open("postgres", connectionInfo)
+func OpenConnection() (*sql.DB, error) {
+	db, err := sql.Open(dbDriver, dbUrl)
 	if err != nil {
 		return nil, err
 	}
