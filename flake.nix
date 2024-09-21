@@ -22,6 +22,7 @@
           packages = with pkgs; [
             go
             nushell
+            goose
           ];
 
           shellHook = ''
