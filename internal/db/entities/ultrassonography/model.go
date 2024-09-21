@@ -2,6 +2,7 @@ package ultrassonography
 
 import (
 	"friendly-backend/internal/db/entities/child"
+	"friendly-backend/internal/db/entities/log"
 	"friendly-backend/internal/db/entities/medical_history"
 	"time"
 
@@ -21,4 +22,6 @@ type Ultrassonography struct {
 	Degree          string                         `json:"degree"`
 	IDChild         child.Child                    `json:"id_child"`
 	IDMedicalHistoy medical_history.MedicalHistory `json:"id_medical_history"`
+	UpdateLog       log.Log                        `json:"update_log"`
+	CreateLog       log.Log                        `json:"create_log"`
 }
