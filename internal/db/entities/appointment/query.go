@@ -1,13 +1,12 @@
-package db
+package appointment
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/appointment"
 
 	"github.com/google/uuid"
 )
 
-func InsertAppointment(appointment appointment.Appointment) (id uuid.UUID, err error) {
+func InsertAppointment(appointment Appointment) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -23,7 +22,7 @@ func InsertAppointment(appointment appointment.Appointment) (id uuid.UUID, err e
 	return
 }
 
-func DeleteAppointment(appointment appointment.Appointment) (id uuid.UUID, err error) {
+func DeleteAppointment(appointment Appointment) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -51,7 +50,7 @@ func DeleteAppointment(appointment appointment.Appointment) (id uuid.UUID, err e
 	return
 }
 
-func GetAppointment(appointment appointment.Appointment) (id uuid.UUID, err error) {
+func GetAppointment(appointment Appointment) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -66,7 +65,7 @@ func GetAppointment(appointment appointment.Appointment) (id uuid.UUID, err erro
 	return
 }
 
-func GetAllApointment() (appointments []appointment.Appointment, err error) {
+func GetAllApointment() (appointments []Appointment, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -82,7 +81,7 @@ func GetAllApointment() (appointments []appointment.Appointment, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var appointment appointment.Appointment
+		var appointment Appointment
 		err = rows.Scan(&appointment.ID, &appointment.IDChild, &appointment.Date, &appointment.IG, &appointment.Weight, &appointment.PA, &appointment.AU, &appointment.BCF, &appointment.CreateLog, &appointment.UpdateLog)
 		if err != nil {
 			return nil, err
@@ -95,7 +94,7 @@ func GetAllApointment() (appointments []appointment.Appointment, err error) {
 	return appointments, nil
 }
 
-func UpdateAppointment(appointment appointment.Appointment) (id uuid.UUID, err error) {
+func UpdateAppointment(appointment Appointment) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
