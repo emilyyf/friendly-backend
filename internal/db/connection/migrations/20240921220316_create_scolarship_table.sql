@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table scholarship (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	child_id uuid references child(id),
 	grade varchar,
 	school varchar,

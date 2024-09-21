@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table household (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	code integer,
 	date timestamp with time zone,
 	address varchar,

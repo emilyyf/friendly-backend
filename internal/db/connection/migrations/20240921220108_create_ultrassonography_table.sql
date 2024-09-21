@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table ultrassonography (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	date timestamp with time zone,
 	weight varchar,
 	height varchar,

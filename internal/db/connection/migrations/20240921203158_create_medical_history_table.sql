@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table medical_history (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	id_person uuid references person(id),
 	smoker bool,
 	alcohool bool,

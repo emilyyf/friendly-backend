@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table person (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	id_household uuid references household(id),
 	birth timestamp with time zone,
 	age varchar,

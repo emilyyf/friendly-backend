@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table vaccine_dosages (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	vaccine_id uuid references vaccines(id),
 	description varchar,
 	create_log uuid references log(id),

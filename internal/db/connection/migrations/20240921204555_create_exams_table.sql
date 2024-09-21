@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table exams (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	description varchar,
 	date timestamp with time zone,
 	result varchar,

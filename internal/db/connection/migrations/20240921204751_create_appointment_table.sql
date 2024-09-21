@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table appointment (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	date timestamp with time zone,
 	ig varchar,
 	weight varchar,

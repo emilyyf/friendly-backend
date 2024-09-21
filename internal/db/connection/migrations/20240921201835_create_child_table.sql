@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table child (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	id_household uuid references household(id),
 	id_mother uuid references person(id),
 	code integer,

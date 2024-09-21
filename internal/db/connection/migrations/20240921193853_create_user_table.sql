@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table users (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	name varchar,
 	email varchar,
 	password varchar,

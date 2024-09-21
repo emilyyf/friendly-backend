@@ -1,7 +1,7 @@
 -- +goose Up
 -- +goose StatementBegin
 create table participation (
-    id uuid unique primary key default gen_random_uuid(),
+	id uuid unique primary key default gen_random_uuid(),
 	child_id uuid references child(id),
 	date timestamp with time zone,
 	description varchar,
