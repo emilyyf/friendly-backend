@@ -2,13 +2,13 @@ package v1
 
 import (
 	"encoding/json"
-	"friendly-backend/internal/models"
+	"friendly-backend/internal/db/entities/user"
 	"io"
 	"net/http"
 )
 
 func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
-	var data models.UserResponse
+	var data user.UserResponse
 	var ret []byte
 
 	body, err := io.ReadAll(r.Body)
