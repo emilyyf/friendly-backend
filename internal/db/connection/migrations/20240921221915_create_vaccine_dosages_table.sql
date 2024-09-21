@@ -1,17 +1,15 @@
 -- +goose Up
 -- +goose StatementBegin
-create table log (
+create table vaccine_dosages (
     id uuid unique primary key default gen_random_uuid(),
-	user_id uuid,
-	table_name varchar,
-	date timestamp with time zone,
+	vaccine_id uuid references vaccines(id),
 	description varchar,
-	action varchar,
-	row_id uuid
+	create_log uuid references log(id),
+	update_log uuid references log(id)
 );
 -- +goose StatementEnd
 
 -- +goose Down
 -- +goose StatementBegin
-drop table log;
+drop table vaccine_dosages;
 -- +goose StatementEnd
