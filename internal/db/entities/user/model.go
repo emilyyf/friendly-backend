@@ -1,9 +1,8 @@
-package models
+package user
 
 import (
 	"time"
 
-	db "friendly-backend/internal/db/sqlc"
 	"github.com/google/uuid"
 )
 
@@ -29,7 +28,19 @@ type UserResponse struct {
 	Verified  bool      `json:"verified"`
 }
 
-func FilteredResponse(user db.User) UserResponse {
+type User struct {
+	ID        uuid.UUID `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	Photo     string    `json:"photo"`
+	Verified  bool      `json:"verified"`
+	Password  string    `json:"password"`
+	Role      string    `json:"role"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
+}
+
+func FilteredResponse(user User) UserResponse {
 	return UserResponse{
 		ID:        user.ID,
 		Email:     user.Email,

@@ -1,6 +1,7 @@
 # Output
 .output
 /build
+friendly-backend
 
 # OS
 .DS_Store

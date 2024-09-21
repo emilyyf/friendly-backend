@@ -1,13 +1,12 @@
-package db
+package child
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/child"
 
 	"github.com/google/uuid"
 )
 
-func InsertChild(child child.Child) (id uuid.UUID, err error) {
+func InsertChild(child Child) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -27,7 +26,7 @@ func InsertChild(child child.Child) (id uuid.UUID, err error) {
 	return
 }
 
-func DeleteChild(child child.Child) (id uuid.UUID, err error) {
+func DeleteChild(child Child) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -56,7 +55,7 @@ func DeleteChild(child child.Child) (id uuid.UUID, err error) {
 	return
 }
 
-func GetChild(child child.Child) (id uuid.UUID, err error) {
+func GetChild(child Child) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return
@@ -73,7 +72,7 @@ func GetChild(child child.Child) (id uuid.UUID, err error) {
 	return
 }
 
-func GetAllChild() (children []child.Child, err error) {
+func GetAllChild() (children []Child, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -88,7 +87,7 @@ func GetAllChild() (children []child.Child, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var child child.Child
+		var child Child
 		err = rows.Scan(&child.ID, &child.IDHousehold, &child.IDMother, &child.Name, &child.Birth, &child.Age, &child.Local, &child.Race, &child.AliveBirthCertificate, &child.BirthCertificate,
 			&child.RG, &child.CPF, &child.SUSCard, &child.BloodType, &child.WeightAtBirth, &child.HeightAtBirth, &child.FirstApgar, &child.FifthApgar, &child.NeonatalHeelPrick, &child.HearTest,
 			&child.HearingTriage, &child.EyeTest, &child.OD, &child.OE, &child.PregnancyTime, &child.Login, &child.MSD, &child.MMII, &child.CreateLog, &child.UpdateLog)
@@ -105,7 +104,7 @@ func GetAllChild() (children []child.Child, err error) {
 	return children, nil
 }
 
-func UpdateChild(child child.Child) (id uuid.UUID, err error) {
+func UpdateChild(child Child) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return

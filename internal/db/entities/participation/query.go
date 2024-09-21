@@ -1,13 +1,12 @@
-package db
+package participation
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/participation"
 
 	"github.com/google/uuid"
 )
 
-func InsertParticipation(participation participation.Participation) (id uuid.UUID, err error) {
+func InsertParticipation(participation Participation) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -23,7 +22,7 @@ func InsertParticipation(participation participation.Participation) (id uuid.UUI
 	return
 }
 
-func DeleteParticipation(participation participation.Participation) (id uuid.UUID, err error) {
+func DeleteParticipation(participation Participation) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -51,7 +50,7 @@ func DeleteParticipation(participation participation.Participation) (id uuid.UUI
 	return
 }
 
-func GetParticipation(participation participation.Participation) (id uuid.UUID, err error) {
+func GetParticipation(participation Participation) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -65,7 +64,7 @@ func GetParticipation(participation participation.Participation) (id uuid.UUID, 
 	return
 }
 
-func GetAllParticipation() (participations []participation.Participation, err error) {
+func GetAllParticipation() (participations []Participation, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -81,7 +80,7 @@ func GetAllParticipation() (participations []participation.Participation, err er
 
 	for rows.Next() {
 
-		var participation participation.Participation
+		var participation Participation
 		err = rows.Scan(&participation.ID, &participation.IDChild, &participation.Date, &participation.Description, &participation.CreateLog, &participation.UpdateLog)
 		if err != nil {
 			return nil, err
@@ -94,7 +93,7 @@ func GetAllParticipation() (participations []participation.Participation, err er
 	return participations, nil
 }
 
-func UpdateParticipations(participation participation.Participation) (id uuid.UUID, err error) {
+func UpdateParticipations(participation Participation) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err

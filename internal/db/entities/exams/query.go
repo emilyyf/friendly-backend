@@ -1,13 +1,12 @@
-package db
+package exams
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/exams"
 
 	"github.com/google/uuid"
 )
 
-func InsertExams(exams exams.Exams) (id uuid.UUID, err error) {
+func InsertExams(exams Exams) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -22,7 +21,7 @@ func InsertExams(exams exams.Exams) (id uuid.UUID, err error) {
 	return
 }
 
-func DeleteExams(exams exams.Exams) (id uuid.UUID, err error) {
+func DeleteExams(exams Exams) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -50,7 +49,7 @@ func DeleteExams(exams exams.Exams) (id uuid.UUID, err error) {
 	return
 }
 
-func GetExams(exams exams.Exams) (id uuid.UUID, err error) {
+func GetExams(exams Exams) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -64,7 +63,7 @@ func GetExams(exams exams.Exams) (id uuid.UUID, err error) {
 	return
 }
 
-func GetAllExams() (exam []exams.Exams, err error) {
+func GetAllExams() (exam []Exams, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -80,7 +79,7 @@ func GetAllExams() (exam []exams.Exams, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var exams exams.Exams
+		var exams Exams
 		err = rows.Scan(&exams.ID, &exams.Description, &exams.Date, &exams.Result, &exams.IGM, &exams.IGG, &exams.IDMedicalHistory, &exams.CreateLog, &exams.UpdateLog)
 		if err != nil {
 			return nil, err
@@ -93,7 +92,7 @@ func GetAllExams() (exam []exams.Exams, err error) {
 	return exam, nil
 }
 
-func UpdateExams(exams exams.Exams) (id uuid.UUID, err error) {
+func UpdateExams(exams Exams) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err

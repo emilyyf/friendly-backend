@@ -1,13 +1,12 @@
-package db
+package person_vaccine
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/person_vaccine"
 
 	"github.com/google/uuid"
 )
 
-func InsertPersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.UUID, err error) {
+func InsertPersonVaccine(person_vaccine PersonVaccine) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -24,7 +23,7 @@ func InsertPersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.U
 	return
 }
 
-func DeletePersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.UUID, err error) {
+func DeletePersonVaccine(person_vaccine PersonVaccine) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -50,7 +49,7 @@ func DeletePersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.U
 	return
 }
 
-func GetPersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.UUID, err error) {
+func GetPersonVaccine(person_vaccine PersonVaccine) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -64,7 +63,7 @@ func GetPersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.UUID
 	return
 }
 
-func GetAllPersonVaccine() (person_vaccines []person_vaccine.PersonVaccine, err error) {
+func GetAllPersonVaccine() (person_vaccines []PersonVaccine, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -79,7 +78,7 @@ func GetAllPersonVaccine() (person_vaccines []person_vaccine.PersonVaccine, err 
 	defer rows.Close()
 
 	for rows.Next() {
-		var person_vaccine person_vaccine.PersonVaccine
+		var person_vaccine PersonVaccine
 		err = rows.Scan(&person_vaccine.ID, &person_vaccine.PersonID, &person_vaccine.VaccineID, &person_vaccine.DosageID, &person_vaccine.Date, &person_vaccine.CreateLog, &person_vaccine.UpdateLog, &person_vaccine.MedicalHistoryID)
 		if err != nil {
 			return nil, err
@@ -92,7 +91,7 @@ func GetAllPersonVaccine() (person_vaccines []person_vaccine.PersonVaccine, err 
 	return person_vaccines, nil
 }
 
-func UpdatePersonVaccine(person_vaccine person_vaccine.PersonVaccine) (id uuid.UUID, err error) {
+func UpdatePersonVaccine(person_vaccine PersonVaccine) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err

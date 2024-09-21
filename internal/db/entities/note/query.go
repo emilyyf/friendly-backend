@@ -1,13 +1,12 @@
-package db
+package note
 
 import (
 	db "friendly-backend/internal/db/connection"
-	"friendly-backend/internal/db/entities/note"
 
 	"github.com/google/uuid"
 )
 
-func InsertNote(note note.Note) (id uuid.UUID, err error) {
+func InsertNote(note Note) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -22,7 +21,7 @@ func InsertNote(note note.Note) (id uuid.UUID, err error) {
 	return
 }
 
-func DeleteNote(note note.Note) (id uuid.UUID, err error) {
+func DeleteNote(note Note) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -50,7 +49,7 @@ func DeleteNote(note note.Note) (id uuid.UUID, err error) {
 	return
 }
 
-func GetNote(note note.Note) (id uuid.UUID, err error) {
+func GetNote(note Note) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
@@ -64,7 +63,7 @@ func GetNote(note note.Note) (id uuid.UUID, err error) {
 	return
 }
 
-func GetAllNote() (notes []note.Note, err error) {
+func GetAllNote() (notes []Note, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return nil, err
@@ -79,7 +78,7 @@ func GetAllNote() (notes []note.Note, err error) {
 	defer rows.Close()
 
 	for rows.Next() {
-		var note note.Note
+		var note Note
 		err = rows.Scan(&note.ID, &note.IDPerson, &note.IDChild, &note.Date, &note.Description, &note.CreateLog, &note.UpdateLog)
 		if err != nil {
 			return nil, err
@@ -92,7 +91,7 @@ func GetAllNote() (notes []note.Note, err error) {
 	return notes, nil
 }
 
-func UpdateNote(note note.Note) (id uuid.UUID, err error) {
+func UpdateNote(note Note) (id uuid.UUID, err error) {
 	conn, err := db.OpenConnection()
 	if err != nil {
 		return uuid.Nil, err
