@@ -3,15 +3,15 @@ package db
 import (
 	"database/sql"
 	"embed"
+	"friendly-backend/internal/config"
 	"log"
-	"os"
 
 	_ "github.com/lib/pq"
 )
 
 var (
-	dbDriver = os.Getenv("POSTGRES_DRIVER")
-	dbUrl    = os.Getenv("POSTGRES_SOURCE")
+	dbDriver = config.GetFromEnv("POSTGRES_DRIVER")
+	dbUrl    = config.GetFromEnv("POSTGRES_SOURCE")
 )
 
 //go:embed migrations/*.sql

@@ -1,8 +1,11 @@
+// TODO: make this file the hub for accessing environment variables and configs
 package config
 
 import (
+	"os"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/spf13/viper"
 )
 
@@ -24,7 +27,8 @@ type Config struct {
 	RefreshTokenMaxAge     int           `mapstructure:"REFRESH_TOKEN_MAXAGE"`
 }
 
-func LoadConfig(path string) (config Config, err error) {
+// this is not working yet
+func loadConfig(path string) (config Config, err error) {
 	viper.AddConfigPath(path)
 	viper.SetConfigType("env")
 	viper.SetConfigName("app")
@@ -38,4 +42,22 @@ func LoadConfig(path string) (config Config, err error) {
 
 	err = viper.Unmarshal(&config)
 	return
+}
+
+func MustLoadConfig(path string) Config {
+	cfg, err := loadConfig(path)
+	if err != nil {
+		panic(err)
+	}
+
+	return cfg
+}
+
+func GetFromEnv(varname string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		panic(err)
+	}
+
+	return os.Getenv(varname)
 }

@@ -1,13 +1,17 @@
-FROM golang:1.22.6 AS builder
+FROM golang:latest AS builder
 
 WORKDIR /app
 
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
+
+RUN go install github.com/air-verse/air
 
 RUN go mod download
 
 COPY . .
 
+RUN go build -o main cmd/main.go
+
 EXPOSE 3000
 
-CMD ["go", "run" , "cmd/main.go"]
+CMD ["air"]
