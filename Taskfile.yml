@@ -1,0 +1,14 @@
+version: "3"
+
+vars:
+  CONTAINER_IMAGE: friendly-backend
+
+tasks:
+  build:
+    desc: Build the docker image
+    cmds:
+    - docker build -t {{.CONTAINER_IMAGE}} .
+  up:
+    desc: Build and run docker container
+    cmds:
+    - docker-compose up --build -d
