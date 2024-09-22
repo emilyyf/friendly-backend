@@ -9,6 +9,6 @@ tasks:
     cmds:
     - docker build -t {{.CONTAINER_IMAGE}} .
   up:
-    desk: Build and run docker container
+    desc: Build and run docker container
     cmds:
     - docker-compose up --build -d
