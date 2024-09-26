@@ -6,7 +6,7 @@ import (
 	"friendly-backend/internal/config"
 	"log"
 
-	_ "github.com/lib/pq"
+	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
 var (
@@ -18,7 +18,7 @@ var (
 var Migrations embed.FS
 
 func OpenConnection() (*sql.DB, error) {
-	db, err := sql.Open(dbDriver, dbUrl)
+	db, err := sql.Open("pgx", dbUrl)
 	if err != nil {
 		return nil, err
 	}
