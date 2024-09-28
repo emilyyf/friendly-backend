@@ -17,7 +17,7 @@ type MedicalHistory struct {
 	Caesarian       int64         `json:"caesarian"`
 	Pregnancy       string        `json:"pregnancy"`
 	BloodType       string        `json:"blood_type"`
-	BloodClocose    string        `json:"blood_glucose"`
+	BloodGlucose    string        `json:"blood_glucose"`
 	Syphilis        string        `json:"syphilis"`
 	HIV             string        `json:"hiv"`
 	CreateLog       log.Log       `json:"create_log"`
