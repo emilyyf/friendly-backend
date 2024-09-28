@@ -16,5 +16,6 @@ func GetUserHandler(w http.ResponseWriter, h *http.Request) {
 		w.Write([]byte("Invalid request!"))
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(ret)
 }
