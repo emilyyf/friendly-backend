@@ -10,7 +10,7 @@ import (
 
 type Person struct {
 	ID              uuid.UUID           `json:"id"`
-	IDHousehould    household.Household `json:"id_househould"`
+	IDHousehold     household.Household `json:"id_household"`
 	Birth           time.Time           `json:"birth"`
 	Age             string              `json:"age"`
 	Name            string              `json:"name"`
@@ -23,7 +23,7 @@ type Person struct {
 	CPF             string              `json:"cpf"`
 	SusCard         string              `json:"sus_card"`
 	CardSeries      string              `json:"card_series"`
-	CarUF           string              `json:"card_uf"`
+	CardUF          string              `json:"card_uf"`
 	Company         string              `json:"company"`
 	WorkFunction    string              `json:"work_function"`
 	EnploymentCard  string              `json:"enployment_card"`
