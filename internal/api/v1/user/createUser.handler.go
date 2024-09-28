@@ -28,6 +28,7 @@ func CreateUserHandler(w http.ResponseWriter, r *http.Request) {
 		goto error
 	}
 
+	w.Header().Set("Content-Type", "application/json")
 	w.Write(ret)
 
 	return
