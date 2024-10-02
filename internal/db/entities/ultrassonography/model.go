@@ -10,7 +10,7 @@ import (
 )
 
 type Ultrassonography struct {
-	ID              uuid.UUID                      `json:"id"`
+	ID              uuid.UUID                      `json:"id" gorm:"primaryKey"`
 	Date            time.Time                      `json:"date"`
 	Weight          string                         `json:"weight"`
 	Height          string                         `json:"height"`

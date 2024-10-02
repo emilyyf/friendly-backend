@@ -7,7 +7,6 @@ import (
 	"os"
 
 	"github.com/joho/godotenv"
-	"github.com/pressly/goose/v3"
 )
 
 func main() {
@@ -25,15 +24,7 @@ func main() {
 		panic(err)
 	}
 
-	goose.SetBaseFS(conn.Migrations)
-
-	if err := goose.SetDialect("postgres"); err != nil {
-		panic(err)
-	}
-
-	if err := goose.Up(db, "migrations"); err != nil {
-		panic(err)
-	}
+	conn.RunMigrations(db)
 
 	http.ListenAndServe(":"+os.Getenv("PORT"), mux)
 }

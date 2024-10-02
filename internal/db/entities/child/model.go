@@ -10,7 +10,7 @@ import (
 )
 
 type Child struct {
-	ID                    uuid.UUID           `json:"id"`
+	ID                    uuid.UUID           `json:"id" gorm:"primaryKey"`
 	IDHousehold           household.Household `json:"id_household"`
 	IDMother              person.Person       `json:"id_mother"`
 	Name                  string              `json:"name"`

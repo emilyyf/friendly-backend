@@ -9,7 +9,7 @@ import (
 )
 
 type Appointment struct {
-	ID        uuid.UUID   `json:"id"`
+	ID        uuid.UUID   `json:"id" gorm:"primaryKey"`
 	IDChild   child.Child `json:"id_child"`
 	Date      time.Time   `json:"date"`
 	IG        string      `json:"ig"`

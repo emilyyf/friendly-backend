@@ -9,7 +9,7 @@ import (
 )
 
 type Participation struct {
-	ID          uuid.UUID   `json:"id"`
+	ID          uuid.UUID   `json:"id" gorm:"primaryKey"`
 	IDChild     child.Child `json:"id_child"`
 	Date        time.Time   `json:"date"`
 	Description string      `json:"description"`

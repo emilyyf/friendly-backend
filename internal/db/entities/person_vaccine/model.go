@@ -12,7 +12,7 @@ import (
 )
 
 type PersonVaccine struct {
-	ID               uuid.UUID                      `json:"id"`
+	ID               uuid.UUID                      `json:"id" gorm:"primaryKey"`
 	PersonID         person.Person                  `json:"person_id"`
 	VaccineID        vaccines.Vaccines              `json:"vacinne_id"`
 	DosageID         vaccine_dosages.VaccineDosages `json:"dosage_id"`
