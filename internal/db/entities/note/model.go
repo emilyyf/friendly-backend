@@ -10,7 +10,7 @@ import (
 )
 
 type Note struct {
-	ID          uuid.UUID     `json:"id"`
+	ID          uuid.UUID     `json:"id" gorm:"primaryKey"`
 	IDPerson    person.Person `json:"id_person"`
 	IDChild     child.Child   `json:"id_child"`
 	Date        time.Time     `json:"date"`

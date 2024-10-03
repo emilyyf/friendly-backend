@@ -1,32 +1,43 @@
 package db
 
 import (
-	"database/sql"
-	"embed"
+	"fmt"
 	"friendly-backend/internal/config"
 	"log"
 
 	_ "github.com/jackc/pgx/v5/stdlib"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 var (
-	dbDriver = config.GetFromEnv("POSTGRES_DRIVER")
-	dbUrl    = config.GetFromEnv("POSTGRES_SOURCE")
+	dbHost = config.GetFromEnv("POSTGRES_HOST")
+	dbPort = config.GetFromEnv("POSTGRES_PORT")
+	dbUser = config.GetFromEnv("POSTGRES_USER")
+	dbPass = config.GetFromEnv("POSTGRES_PASSWORD")
+	dbName = config.GetFromEnv("POSTGRES_DB")
+	dbZone = config.GetFromEnv("POSTGRES_TIME_ZONE")
 )
 
-//go:embed migrations/*.sql
-var Migrations embed.FS
+func OpenConnection() (*gorm.DB, error) {
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable TimeZone=%s",
+		dbHost,
+		dbUser,
+		dbPass,
+		dbName,
+		dbPort,
+		dbZone,
+	)
 
-func OpenConnection() (*sql.DB, error) {
-	db, err := sql.Open("pgx", dbUrl)
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		return nil, err
 	}
 
-	err = db.Ping()
-	if err != nil {
-		return nil, err
-	}
+	// err = db.Ping()
+	// if err != nil {
+	// 	return nil, err
+	// }
 
 	log.Println("Succesfuly connected to the database!")
 	return db, nil

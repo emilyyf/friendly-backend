@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Role = int16
@@ -29,7 +30,7 @@ type UserResponse struct {
 }
 
 type User struct {
-	ID        uuid.UUID `json:"id"`
+	ID        uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	Photo     string    `json:"photo"`
@@ -49,4 +50,9 @@ func FilteredResponse(user User) UserResponse {
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
+}
+
+func (u *User) BeforeCreate(d *gorm.DB) (err error) {
+	u.ID = uuid.New()
+	return
 }

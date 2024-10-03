@@ -9,7 +9,7 @@ import (
 )
 
 type Person struct {
-	ID              uuid.UUID           `json:"id"`
+	ID              uuid.UUID           `json:"id" gorm:"primaryKey"`
 	IDHousehold     household.Household `json:"id_household"`
 	Birth           time.Time           `json:"birth"`
 	Age             string              `json:"age"`

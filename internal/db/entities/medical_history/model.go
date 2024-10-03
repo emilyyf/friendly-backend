@@ -8,7 +8,7 @@ import (
 )
 
 type MedicalHistory struct {
-	ID              uuid.UUID     `json:"id"`
+	ID              uuid.UUID     `json:"id" gorm:"primaryKey"`
 	IDPerson        person.Person `json:"id_person"`
 	Smoker          bool          `json:"smoker"`
 	Alcohool        bool          `json:"alcohool"`

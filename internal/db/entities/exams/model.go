@@ -9,7 +9,7 @@ import (
 )
 
 type Exams struct {
-	ID               uuid.UUID                      `json:"id"`
+	ID               uuid.UUID                      `json:"id" gorm:"primaryKey"`
 	Description      string                         `json:"description"`
 	Date             time.Time                      `json:"date"`
 	Result           string                         `json:"result"`

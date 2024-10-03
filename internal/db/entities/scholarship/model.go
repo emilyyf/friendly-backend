@@ -7,7 +7,7 @@ import (
 )
 
 type Scholarship struct {
-	ID      uuid.UUID   `json:"id"`
+	ID      uuid.UUID   `json:"id" gorm:"primaryKey"`
 	ChildID child.Child `json:"child_id"`
 	Grade   string      `json:"grade"`
 	School  string      `json:"school"`

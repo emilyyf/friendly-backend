@@ -7,7 +7,7 @@ import (
 )
 
 type Vaccines struct {
-	ID        uuid.UUID `json:"id"`
+	ID        uuid.UUID `json:"id" gorm:"primaryKey"`
 	Name      string    `json:"name"`
 	CreateLog log.Log   `json:"create_log"`
 	UpdateLog log.Log   `json:"update_log"`

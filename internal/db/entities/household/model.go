@@ -8,7 +8,7 @@ import (
 )
 
 type Household struct {
-	ID                uuid.UUID `json:"id"`
+	ID                uuid.UUID `json:"id" gorm:"primaryKey"`
 	Code              int64     `json:"code"`
 	Date              time.Time `json:"date"`
 	Adress            string    `json:"adress"`
