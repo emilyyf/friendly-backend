@@ -1,8 +1,7 @@
 package db
 
 import (
-	"friendly-backend/internal/db/entities/log"
-	"friendly-backend/internal/db/entities/user"
+	e "friendly-backend/internal/db/entities"
 
 	"gorm.io/gorm"
 )
@@ -12,6 +11,6 @@ func RunMigrations(db *gorm.DB) {
 }
 
 func createTables(db *gorm.DB) {
-	db.AutoMigrate(&user.User{})
-	db.AutoMigrate(&log.Log{})
+	db.AutoMigrate(&e.User{})
+	db.AutoMigrate(&e.Log{})
 }

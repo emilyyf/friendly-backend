@@ -2,12 +2,12 @@ package v1
 
 import (
 	"encoding/json"
-	"friendly-backend/internal/db/entities/user"
+	"friendly-backend/internal/db/entities"
 	"net/http"
 )
 
 func GetUserHandler(w http.ResponseWriter, h *http.Request) {
-	var data user.UserResponse
+	var data entities.UserResponse
 	data.Name = "Placeholder"
 
 	ret, err := json.Marshal(data)

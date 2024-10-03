@@ -1,7 +1,6 @@
-package household
+package entities
 
 import (
-	"friendly-backend/internal/db/entities/log"
 	"time"
 
 	"github.com/google/uuid"
@@ -31,6 +30,6 @@ type Household struct {
 	WashingMachine    bool      `json:"washing_machine"`
 	RoadType          string    `json:"road_type"`
 	ReferingPerson    string    `json:"refering_person"`
-	CreateLog         log.Log   `json:"create_log"`
-	UpdateLog         log.Log   `json:"update_log"`
+	CreateLog         Log       `json:"create_log"`
+	UpdateLog         Log       `json:"update_log"`
 }
