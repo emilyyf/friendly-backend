@@ -20,8 +20,8 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	
-  conn.RunMigrations(db)
+
+	conn.RunMigrations(db)
 
 	r := gin.Default()
 
@@ -40,4 +40,3 @@ func main() {
 
 	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
-

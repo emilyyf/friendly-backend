@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"friendly-backend/internal/db/entities/user"
+	"friendly-backend/internal/db/entities"
 	"net/http"
 	"time"
 
@@ -22,7 +22,7 @@ func VerifyPassword(hashedPassword, password string) error {
 	return bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(password))
 }
 
-func GenerateToken(user user.User) (string, error) {
+func GenerateToken(user entities.User) (string, error) {
 	expirationTime := time.Now().Add(24 * time.Hour)
 	claims := &jwt.StandardClaims{
 		Subject:   user.ID.String(),
@@ -34,7 +34,7 @@ func GenerateToken(user user.User) (string, error) {
 }
 
 func CreateUserHandler(c *gin.Context) {
-	var input user.SignInInput
+	var input entities.SignInInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -46,7 +46,7 @@ func CreateUserHandler(c *gin.Context) {
 		return
 	}
 
-	newUser := user.User{
+	newUser := entities.User{
 		Email:    input.Email,
 		Password: hashedPassword,
 		Verified: true,
@@ -58,17 +58,17 @@ func CreateUserHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusCreated, user.FilteredResponse(newUser))
+	c.JSON(http.StatusCreated, entities.FilteredResponse(newUser))
 }
 
 func LoginHandler(c *gin.Context) {
-	var input user.SignInInput
+	var input entities.SignInInput
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	var existingUser user.User
+	var existingUser entities.User
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.Where("email = ?", input.Email).First(&existingUser).Error; err != nil {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
@@ -114,11 +114,10 @@ func AuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-
 func ProfileHandler(c *gin.Context) {
 	userID := c.MustGet("userID").(string)
 
-	var u user.User
+	var u entities.User
 	db := c.MustGet("db").(*gorm.DB)
 	if err := db.First(&u, "id = ?", userID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
@@ -129,6 +128,5 @@ func ProfileHandler(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, user.FilteredResponse(u))
+	c.JSON(http.StatusOK, entities.FilteredResponse(u))
 }
-
