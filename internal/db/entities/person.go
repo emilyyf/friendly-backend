@@ -4,11 +4,13 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Person struct {
-	ID              uuid.UUID `json:"id" gorm:"primaryKey"`
-	IDHousehold     Household `json:"id_household"`
+	ID              uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
+	HouseholdID     uuid.UUID `json:"id_household" gorm:"type:uuid;"`
+	Household       Household
 	Birth           time.Time `json:"birth"`
 	Age             string    `json:"age"`
 	Name            string    `json:"name"`
@@ -29,6 +31,13 @@ type Person struct {
 	ResignationDate time.Time `json:"resignation_date"`
 	Salary          int64     `json:"salary"`
 	ExtraIncome     int64     `json:"extra_income"`
-	CreateLog       Log       `json:"create_log"`
-	UpdateLog       Log       `json:"update_log"`
+	CreateLogID     uuid.UUID `json:"create_log" gorm:"type:uuid;"`
+	CreateLog       Log
+	UpdateLogID     uuid.UUID `json:"update_log" gorm:"type:uuid;"`
+	UpdateLog       Log
+}
+
+func (p *Person) BeforeCreate(d *gorm.DB) (err error) {
+	p.ID = uuid.New()
+	return
 }

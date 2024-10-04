@@ -4,12 +4,15 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type Child struct {
-	ID                    uuid.UUID `json:"id" gorm:"primaryKey"`
-	IDHousehold           Household `json:"id_household"`
-	IDMother              Person    `json:"id_mother"`
+	ID                    uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
+	HouseholdID           uuid.UUID `json:"household_id" gorm:"type:uuid;"`
+	Household             Household
+	MotherID              uuid.UUID `json:"mother_id" gorm:"type:uuid;"`
+	Mother                Person
 	Name                  string    `json:"name"`
 	Birth                 time.Time `json:"birth"`
 	Age                   string    `json:"age"`
@@ -35,6 +38,13 @@ type Child struct {
 	Login                 string    `json:"login"`
 	MSD                   string    `json:"msd"`
 	MMII                  string    `json:"mmii"`
-	CreateLog             Log       `json:"create_log"`
-	UpdateLog             Log       `json:"update_log"`
+	CreateLogID           uuid.UUID `json:"create_log" gorm:"type:uuid;"`
+	CreateLog             Log
+	UpdateLogID           uuid.UUID `json:"update_log" gorm:"type:uuid;"`
+	UpdateLog             Log
+}
+
+func (c *Child) BeforeCreate(d *gorm.DB) (err error) {
+	c.ID = uuid.New()
+	return
 }

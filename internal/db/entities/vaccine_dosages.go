@@ -2,12 +2,21 @@ package entities
 
 import (
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type VaccineDosages struct {
-	ID          uuid.UUID `json:"id" gorm:"primaryKey"`
-	VaccineID   Vaccines  `json:"vaccine_id"`
+	ID          uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
+	VaccineID   uuid.UUID `json:"vaccine_id" gorm:"type:uuid;"`
+	Vaccine     Vaccines
 	Descripiton string    `json:"description"`
-	CreateLog   Log       `json:"create_log"`
-	UpdateLog   Log       `json:"update_log"`
+	CreateLogID uuid.UUID `json:"create_log" gorm:"type:uuid;"`
+	CreateLog   Log
+	UpdateLogID uuid.UUID `json:"update_log" gorm:"type:uuid;"`
+	UpdateLog   Log
+}
+
+func (v *VaccineDosages) BeforeCreate(d *gorm.DB) (err error) {
+	v.ID = uuid.New()
+	return
 }
