@@ -1,7 +1,6 @@
-package log
+package entities
 
 import (
-	"friendly-backend/internal/db/entities/user"
 	"time"
 
 	"gorm.io/gorm"
@@ -12,7 +11,7 @@ import (
 type Log struct {
 	ID          uuid.UUID `json:"id" gorm:"type:uuid;primaryKey;"`
 	UserID      uuid.UUID `json:"user_id" gorm:"type:uuid;"`
-	User        user.User
+	User        User
 	Table       string    `json:"table"`
 	Date        time.Time `json:"date"`
 	Description string    `json:"description"`
