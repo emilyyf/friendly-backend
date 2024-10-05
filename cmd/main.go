@@ -28,11 +28,11 @@ func main() {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, 	
-    AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
-		ExposeHeaders:    []string{"Content-Length"},
-		MaxAge:           12 * time.Hour,
+		AllowOrigins:  []string{"http://localhost:5173"},
+		AllowMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:  []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders: []string{"Content-Length"},
+		MaxAge:        12 * time.Hour,
 	}))
 
 	r.Use(func(c *gin.Context) {
@@ -50,4 +50,3 @@ func main() {
 
 	http.ListenAndServe(":"+os.Getenv("PORT"), r)
 }
-
