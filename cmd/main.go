@@ -5,7 +5,9 @@ import (
 	"friendly-backend/internal/handlers"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -24,6 +26,16 @@ func main() {
 	conn.RunMigrations(db)
 
 	r := gin.Default()
+
+	corsOrigin := os.Getenv("CORS")
+
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:  []string{corsOrigin},
+		AllowMethods:  []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:  []string{"Origin", "Content-Type", "Accept"},
+		ExposeHeaders: []string{"Content-Length"},
+		MaxAge:        12 * time.Hour,
+	}))
 
 	r.Use(func(c *gin.Context) {
 		c.Set("db", db)
