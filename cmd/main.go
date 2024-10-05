@@ -27,7 +27,7 @@ func main() {
 
 	r := gin.Default()
 
-  corsOrigin := os.Getenv("CORS")
+	corsOrigin := os.Getenv("CORS")
 
 	r.Use(cors.New(cors.Config{
 		AllowOrigins:  []string{corsOrigin},
