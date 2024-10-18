@@ -3,22 +3,32 @@ package tests
 import (
 	"bytes"
 	"encoding/json"
+	"friendly-backend/internal/db/entities"
+	"friendly-backend/internal/handlers"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"friendly-backend/internal/db/entities"
-	"friendly-backend/internal/handlers"
-
 	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/driver/sqlite"
+	"gopkg.in/DATA-DOG/go-sqlmock.v1"
+	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-func setupRouter() (*gin.Engine, *gorm.DB) {
-	db, _ := gorm.Open(sqlite.Open(":memory:"), &gorm.Config{})
-	db.AutoMigrate(&entities.User{})
+func setupRouter(t *testing.T) (*gin.Engine, *gorm.DB) {
+	mockDB, _, err := sqlmock.New()
+	if err != nil {
+		t.Fatalf("an error '%s' was not expected when opening a stub database connection", err)
+	}
+
+	dialector := postgres.New(postgres.Config{
+		Conn:       mockDB,
+		DriverName: "postgres",
+	})
+	db, _ := gorm.Open(dialector, &gorm.Config{})
+
+	gin.SetMode(gin.TestMode)
 
 	router := gin.Default()
 	router.Use(func(c *gin.Context) {
@@ -31,14 +41,13 @@ func setupRouter() (*gin.Engine, *gorm.DB) {
 }
 
 func TestCreateUserHandler(t *testing.T) {
-	router, db := setupRouter()
-	defer db.Exec("DROP TABLE users")
+	router, db := setupRouter(t)
 
 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
 	body, _ := json.Marshal(userInput)
-
 	req, _ := http.NewRequest("POST", "/create", bytes.NewBuffer(body))
 	w := httptest.NewRecorder()
+
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusCreated, w.Code)
@@ -50,7 +59,7 @@ func TestCreateUserHandler(t *testing.T) {
 }
 
 func TestLoginHandler(t *testing.T) {
-	router, db := setupRouter()
+	router, db := setupRouter(t)
 	defer db.Exec("DROP TABLE users")
 
 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
@@ -70,7 +79,7 @@ func TestLoginHandler(t *testing.T) {
 }
 
 func TestProfileHandler(t *testing.T) {
-	router, db := setupRouter()
+	router, db := setupRouter(t)
 	defer db.Exec("DROP TABLE users")
 
 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
@@ -95,7 +104,7 @@ func TestProfileHandler(t *testing.T) {
 }
 
 func TestAuthMiddleware(t *testing.T) {
-	router, _ := setupRouter()
+	router, _ := setupRouter(t)
 
 	req, _ := http.NewRequest("GET", "/profile", nil)
 	w := httptest.NewRecorder()
@@ -111,7 +120,7 @@ func TestAuthMiddleware(t *testing.T) {
 }
 
 func TestCreateUserBadRequest(t *testing.T) {
-	router, _ := setupRouter()
+	router, _ := setupRouter(t)
 
 	body := []byte(`{"email": "test@example.com"}`)
 	req, _ := http.NewRequest("POST", "/create", bytes.NewBuffer(body))
