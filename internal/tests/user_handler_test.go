@@ -50,14 +50,12 @@ func TestCreateUserHandler(t *testing.T) {
 	mockID := uuid.New()
 
 	mock.ExpectBegin()
-	// Set up the expectation for the INSERT
 	mock.ExpectExec("INSERT INTO \"users\"").
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), true, sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectCommit()
 
-	// Expectation for the SELECT after successful INSERT
 	mock.ExpectQuery(`SELECT \* FROM "users" WHERE email = \$1 ORDER BY "users"."id" LIMIT \$2`).
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "email", "verified"}).
@@ -69,7 +67,6 @@ func TestCreateUserHandler(t *testing.T) {
 		}
 	})
 
-	// Create the request to simulate user creation
 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
 	body, err := json.Marshal(userInput)
 	if err != nil {
@@ -94,7 +91,6 @@ func TestCreateUserHandler(t *testing.T) {
 	assert.Equal(t, "test@example.com", response.Email)
 	assert.True(t, response.Verified)
 
-	// Validate user details in the database
 	var user *entities.User
 	err = db.Where("email = ?", userInput.Email).First(&user).Error
 	assert.NoError(t, err)
