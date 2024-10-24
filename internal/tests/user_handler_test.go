@@ -98,26 +98,47 @@ func TestCreateUserHandler(t *testing.T) {
 	assert.True(t, user.Verified)
 }
 
-// func TestLoginHandler(t *testing.T) {
-//
-// 	router, db := setupRouter(t)
-// 	defer db.Exec("DROP TABLE users")
-//
-// 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
-// 	hashedPassword, _ := handlers.HashPassword(userInput.Password)
-// 	db.Create(&entities.User{Email: userInput.Email, Password: hashedPassword, Verified: true})
-//
-// 	body, _ := json.Marshal(userInput)
-// 	req, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(body))
-// 	w := httptest.NewRecorder()
-// 	router.ServeHTTP(w, req)
-//
-// 	assert.Equal(t, http.StatusOK, w.Code)
-//
-// 	var response map[string]string
-// 	json.Unmarshal(w.Body.Bytes(), &response)
-// 	assert.NotEmpty(t, response["token"])
-// }
+func TestLoginHandler(t *testing.T) {
+	router, _, mock := setupRouter(t)
+
+	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
+	hashedPassword, _ := handlers.HashPassword(userInput.Password)
+	mockID := uuid.New()
+	mockUser := entities.User{ID: mockID, Email: userInput.Email, Password: hashedPassword, Verified: true}
+
+	mock.ExpectQuery(`SELECT \* FROM "users" WHERE email = \$1 ORDER BY "users"."id" LIMIT \$2`).
+		WithArgs(userInput.Email, 1).
+		WillReturnRows(sqlmock.NewRows([]string{"id", "email", "password", "verified"}).
+			AddRow(mockUser.ID.String(), mockUser.Email, mockUser.Password, mockUser.Verified))
+
+	t.Cleanup(func() {
+		if err := mock.ExpectationsWereMet(); err != nil {
+			t.Errorf("there are unfulfilled expectations: %s", err)
+		}
+	})
+
+	body, err := json.Marshal(userInput)
+	if err != nil {
+		t.Fatalf("failed to marshal user input: %v", err)
+	}
+	req, err := http.NewRequest("POST", "/login", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatalf("failed to create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	w := httptest.NewRecorder()
+
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+
+	var response map[string]string
+	err = json.Unmarshal(w.Body.Bytes(), &response)
+	if err != nil {
+		t.Fatalf("failed to decode response: %v", err)
+	}
+	assert.NotEmpty(t, response["token"])
+}
 
 // func TestProfileHandler(t *testing.T) {
 //
