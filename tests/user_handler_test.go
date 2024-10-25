@@ -142,53 +142,57 @@ func TestLoginHandler(t *testing.T) {
 
 // func TestProfileHandler(t *testing.T) {
 //
-// 	router, db := setupRouter(t)
-// 	defer db.Exec("DROP TABLE users")
+//		router, db := setupRouter(t)
+//		defer db.Exec("DROP TABLE users")
 //
-// 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
-// 	hashedPassword, _ := handlers.HashPassword(userInput.Password)
-// 	db.Create(&entities.User{Email: userInput.Email, Password: hashedPassword, Verified: true})
+//		userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
+//		hashedPassword, _ := handlers.HashPassword(userInput.Password)
+//		db.Create(&entities.User{Email: userInput.Email, Password: hashedPassword, Verified: true})
 //
-// 	loginBody, _ := json.Marshal(userInput)
-// 	reqLogin, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(loginBody))
-// 	wLogin := httptest.NewRecorder()
-// 	router.ServeHTTP(wLogin, reqLogin)
+//		loginBody, _ := json.Marshal(userInput)
+//		reqLogin, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(loginBody))
+//		wLogin := httptest.NewRecorder()
+//		router.ServeHTTP(wLogin, reqLogin)
 //
-// 	var loginResponse map[string]string
-// 	json.Unmarshal(wLogin.Body.Bytes(), &loginResponse)
-// 	token := loginResponse["token"]
+//		var loginResponse map[string]string
+//		json.Unmarshal(wLogin.Body.Bytes(), &loginResponse)
+//		token := loginResponse["token"]
 //
-// 	reqProfile, _ := http.NewRequest("GET", "/profile", nil)
-// 	reqProfile.Header.Set("Authorization", token)
-// 	wProfile := httptest.NewRecorder()
-// 	router.ServeHTTP(wProfile, reqProfile)
+//		reqProfile, _ := http.NewRequest("GET", "/profile", nil)
+//		reqProfile.Header.Set("Authorization", token)
+//		wProfile := httptest.NewRecorder()
+//		router.ServeHTTP(wProfile, reqProfile)
 //
-// 	assert.Equal(t, http.StatusOK, wProfile.Code)
-// }
+//		assert.Equal(t, http.StatusOK, wProfile.Code)
+//	}
 //
-// func TestAuthMiddleware(t *testing.T) {
-// 	router, _ := setupRouter(t)
+//	func TestAuthMiddleware(t *testing.T) {
+//		router, _ := setupRouter(t)
 //
-// 	req, _ := http.NewRequest("GET", "/profile", nil)
-// 	w := httptest.NewRecorder()
-// 	router.ServeHTTP(w, req)
+//		req, _ := http.NewRequest("GET", "/profile", nil)
+//		w := httptest.NewRecorder()
+//		router.ServeHTTP(w, req)
 //
-// 	assert.Equal(t, http.StatusUnauthorized, w.Code)
+//		assert.Equal(t, http.StatusUnauthorized, w.Code)
 //
-// 	req.Header.Set("Authorization", "invalid-token")
-// 	w = httptest.NewRecorder()
-// 	router.ServeHTTP(w, req)
+//		req.Header.Set("Authorization", "invalid-token")
+//		w = httptest.NewRecorder()
+//		router.ServeHTTP(w, req)
 //
-// 	assert.Equal(t, http.StatusUnauthorized, w.Code)
-// }
-//
-// func TestCreateUserBadRequest(t *testing.T) {
-// 	router, _ := setupRouter(t)
-//
-// 	body := []byte(`{"email": "test@example.com"}`)
-// 	req, _ := http.NewRequest("POST", "/create", bytes.NewBuffer(body))
-// 	w := httptest.NewRecorder()
-// 	router.ServeHTTP(w, req)
-//
-// 	assert.Equal(t, http.StatusBadRequest, w.Code)
-// }
+//		assert.Equal(t, http.StatusUnauthorized, w.Code)
+//	}
+func TestCreateUserBadRequest(t *testing.T) {
+	router, _, _ := setupRouter(t)
+
+	body := []byte(`{"Email": "test@example.com"}`)
+	req, err := http.NewRequest("POST", "/create", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatalf("Could not create request: %v", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
