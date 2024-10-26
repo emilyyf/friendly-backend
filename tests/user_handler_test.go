@@ -7,8 +7,10 @@ import (
 	"friendly-backend/internal/handlers"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"testing"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/assert"
@@ -16,6 +18,8 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
 
 func setupRouter(t *testing.T) (*gin.Engine, *gorm.DB, sqlmock.Sqlmock) {
 	mockDB, mock, err := sqlmock.New()
@@ -40,7 +44,6 @@ func setupRouter(t *testing.T) (*gin.Engine, *gorm.DB, sqlmock.Sqlmock) {
 	})
 	router.POST("/create", handlers.CreateUserHandler)
 	router.POST("/login", handlers.LoginHandler)
-	router.GET("/profile", handlers.AuthMiddleware(), handlers.ProfileHandler)
 
 	return router, db, mock
 }
@@ -140,47 +143,6 @@ func TestLoginHandler(t *testing.T) {
 	assert.NotEmpty(t, response["token"])
 }
 
-// func TestProfileHandler(t *testing.T) {
-//
-//		router, db := setupRouter(t)
-//		defer db.Exec("DROP TABLE users")
-//
-//		userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
-//		hashedPassword, _ := handlers.HashPassword(userInput.Password)
-//		db.Create(&entities.User{Email: userInput.Email, Password: hashedPassword, Verified: true})
-//
-//		loginBody, _ := json.Marshal(userInput)
-//		reqLogin, _ := http.NewRequest("POST", "/login", bytes.NewBuffer(loginBody))
-//		wLogin := httptest.NewRecorder()
-//		router.ServeHTTP(wLogin, reqLogin)
-//
-//		var loginResponse map[string]string
-//		json.Unmarshal(wLogin.Body.Bytes(), &loginResponse)
-//		token := loginResponse["token"]
-//
-//		reqProfile, _ := http.NewRequest("GET", "/profile", nil)
-//		reqProfile.Header.Set("Authorization", token)
-//		wProfile := httptest.NewRecorder()
-//		router.ServeHTTP(wProfile, reqProfile)
-//
-//		assert.Equal(t, http.StatusOK, wProfile.Code)
-//	}
-//
-//	func TestAuthMiddleware(t *testing.T) {
-//		router, _ := setupRouter(t)
-//
-//		req, _ := http.NewRequest("GET", "/profile", nil)
-//		w := httptest.NewRecorder()
-//		router.ServeHTTP(w, req)
-//
-//		assert.Equal(t, http.StatusUnauthorized, w.Code)
-//
-//		req.Header.Set("Authorization", "invalid-token")
-//		w = httptest.NewRecorder()
-//		router.ServeHTTP(w, req)
-//
-//		assert.Equal(t, http.StatusUnauthorized, w.Code)
-//	}
 func TestCreateUserBadRequest(t *testing.T) {
 	router, _, _ := setupRouter(t)
 
@@ -195,4 +157,32 @@ func TestCreateUserBadRequest(t *testing.T) {
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusBadRequest, w.Code)
+}
+
+func TestAuthMiddleware_ValidToken(t *testing.T) {
+
+	mockUserID := "12345"
+	claims := jwt.StandardClaims{
+		Subject: mockUserID,
+	}
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	tokenString, _ := token.SignedString(jwtSecret)
+
+	router := gin.Default()
+	router.Use(handlers.AuthMiddleware())
+	router.GET("/protected", func(c *gin.Context) {
+		userID, _ := c.Get("userID")
+		c.JSON(http.StatusOK, gin.H{"message": "Access granted", "userID": userID})
+	})
+
+	req, _ := http.NewRequest("GET", "/protected", nil)
+	req.Header.Set("Authorization", tokenString)
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusOK, w.Code)
+	var response map[string]interface{}
+	json.NewDecoder(w.Body).Decode(&response)
+	assert.Equal(t, "Access granted", response["message"])
+	assert.Equal(t, mockUserID, response["userID"])
 }
