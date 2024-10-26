@@ -17,4 +17,5 @@ build:
       - friendly-backend
 
 test:
-  - go test ./...
+  script:
+    - go test ./...
