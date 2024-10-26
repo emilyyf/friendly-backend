@@ -221,3 +221,21 @@ func TestAuthMiddleware_NoTokenProvided(t *testing.T) {
 	json.NewDecoder(w.Body).Decode(&response)
 	assert.Equal(t, "No token provided", response["error"])
 }
+
+func TestProfileHandler_UserNotFound(t *testing.T) {
+	router, _, mock := setupRouter(t)
+
+	mockUserID := "nonexistent"
+	mock.ExpectQuery(`SELECT \* FROM "users" WHERE id = \$1 LIMIT 1`).
+		WithArgs(mockUserID).WillReturnError(gorm.ErrRecordNotFound)
+
+	req, _ := http.NewRequest("GET", "/profile", nil)
+	req.Header.Set("Authorization", "Bearer validToken")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusNotFound, w.Code)
+	var response map[string]string
+	json.NewDecoder(w.Body).Decode(&response)
+	assert.Equal(t, "", response["error"])
+}
