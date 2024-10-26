@@ -186,3 +186,21 @@ func TestAuthMiddleware_ValidToken(t *testing.T) {
 	assert.Equal(t, "Access granted", response["message"])
 	assert.Equal(t, mockUserID, response["userID"])
 }
+
+func TestAuthMiddleware_InvalidToken(t *testing.T) {
+	router := gin.Default()
+	router.Use(handlers.AuthMiddleware())
+	router.GET("/protected", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"message": "You have acess"})
+	})
+
+	req, _ := http.NewRequest("GET", "/protected", nil)
+	req.Header.Set("Authorization", "invalidToken")
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	assert.Equal(t, http.StatusUnauthorized, w.Code)
+	var response map[string]string
+	json.NewDecoder(w.Body).Decode(&response)
+	assert.Equal(t, "Invalid token", response["error"])
+}
