@@ -47,6 +47,7 @@ func FilteredResponse(user User) UserResponse {
 		Email:     user.Email,
 		Name:      user.Name,
 		Role:      user.Role,
+		Verified:  user.Verified,
 		CreatedAt: user.CreatedAt,
 		UpdatedAt: user.UpdatedAt,
 	}
