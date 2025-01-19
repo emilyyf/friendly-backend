@@ -42,6 +42,8 @@ func main() {
 		c.Next()
 	})
 
+	r.GET("/health", handlers.HealthHandler)
+
 	r.POST("/register", handlers.CreateUserHandler)
 	r.POST("/login", handlers.LoginHandler)
 
