@@ -50,7 +50,7 @@ func CreateUserHandler(c *gin.Context) {
 	newUser := entities.User{
 		Email:    input.Email,
 		Password: hashedPassword,
-		Verified: true,
+		Verified: false,
 	}
 
 	db := c.MustGet("db").(*gorm.DB)
