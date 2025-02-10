@@ -54,7 +54,7 @@ func TestCreateUserHandler(t *testing.T) {
 
 	mock.ExpectBegin()
 	mock.ExpectExec("INSERT INTO \"users\"").
-		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), true, sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
+		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), false, sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnResult(sqlmock.NewResult(1, 1))
 
 	mock.ExpectCommit()
@@ -92,13 +92,13 @@ func TestCreateUserHandler(t *testing.T) {
 	}
 
 	assert.Equal(t, "test@example.com", response.Email)
-	assert.True(t, response.Verified)
+	assert.False(t, response.Verified)
 
 	var user *entities.User
 	err = db.Where("email = ?", userInput.Email).First(&user).Error
 	assert.NoError(t, err)
 	assert.NotEmpty(t, user.ID)
-	assert.True(t, user.Verified)
+	assert.False(t, user.Verified)
 }
 
 func TestLoginHandler(t *testing.T) {
@@ -107,7 +107,7 @@ func TestLoginHandler(t *testing.T) {
 	userInput := entities.SignInInput{Email: "test@example.com", Password: "password123"}
 	hashedPassword, _ := handlers.HashPassword(userInput.Password)
 	mockID := uuid.New()
-	mockUser := entities.User{ID: mockID, Email: userInput.Email, Password: hashedPassword, Verified: true}
+	mockUser := entities.User{ID: mockID, Email: userInput.Email, Password: hashedPassword, Verified: false}
 
 	mock.ExpectQuery(`SELECT \* FROM "users" WHERE email = \$1 ORDER BY "users"."id" LIMIT \$2`).
 		WithArgs(userInput.Email, 1).
