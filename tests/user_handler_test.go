@@ -62,7 +62,7 @@ func TestCreateUserHandler(t *testing.T) {
 	mock.ExpectQuery(`SELECT \* FROM "users" WHERE email = \$1 ORDER BY "users"."id" LIMIT \$2`).
 		WithArgs(sqlmock.AnyArg(), sqlmock.AnyArg()).
 		WillReturnRows(sqlmock.NewRows([]string{"id", "email", "verified"}).
-			AddRow(mockID.String(), "test@example.com", true))
+			AddRow(mockID.String(), "test@example.com", false))
 
 	t.Cleanup(func() {
 		if err := mock.ExpectationsWereMet(); err != nil {
