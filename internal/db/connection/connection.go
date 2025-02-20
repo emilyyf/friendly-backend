@@ -34,11 +34,6 @@ func OpenConnection() (*gorm.DB, error) {
 		return nil, err
 	}
 
-	// err = db.Ping()
-	// if err != nil {
-	// 	return nil, err
-	// }
-
 	log.Println("Succesfuly connected to the database!")
 	return db, nil
 }
