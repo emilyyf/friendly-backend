@@ -1,9 +1,9 @@
 package handlers
 
 import (
+	"friendly-backend/internal/config"
 	"friendly-backend/internal/db/entities"
 	"net/http"
-	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -12,7 +12,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var jwtSecret = []byte(os.Getenv("JWT_SECRET"))
+var jwtSecret = []byte(config.GetFromEnv("JWT_SECRET"))
 
 func HashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
